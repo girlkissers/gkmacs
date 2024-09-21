@@ -1,0 +1,5 @@
+#+title: Readme
+
+This is an experimental "emacs from scratch" that I've opted in to attempt
+making. How much time I choose to allocate is still uncertain, but I will try
+to at least make it usable by my own standards.
