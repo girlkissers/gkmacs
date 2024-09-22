@@ -64,6 +64,10 @@
 (use-package consult
   :ensure (:wait t))
 
+;; (use-package consult-projectile
+;;   :ensure (:wait t)
+;;   :after projectile)
+
 (use-package dashboard
   :ensure t
   :config
@@ -166,12 +170,15 @@
   (general-create-definer gk/evil-keys
     :states '(normal insert visual emacs)))
 
-(use-package helpful)
+(use-package helpful
+  :defer t)
 
 
 
-(use-package ghub)
+(use-package ghub
+  :defer t)
 (use-package magit
+  :defer t
   :init
   (add-hook 'git-commit-mode-hook 'evil-insert-state))
 
@@ -185,9 +192,10 @@
 (use-package nerd-icons)
 
 (use-package nerd-icons-completion
+  :after marginalia
   :config
-  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup)
-  (nerd-icons-completion-mode))
+  (nerd-icons-completion-mode)
+  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
 
 (use-package nerd-icons-corfu
   :config
@@ -222,6 +230,18 @@
   (completion-category-defaults nil)
   (completion-category-overrides '((file (styles partial-completion)))))
 
+(with-eval-after-load 'org
+  (setq org-todo-keywords
+        '((sequence "TODO(t!)" "PROJ(p!)" "LOOP(r!)" "STRT(s!)" "WAIT(w!)" "HOLD(h!)" "IDEA(i!)" "|" "DONE(d!)" "KILL(k!)")
+          (sequence "[ ](T!)" "[-](S!)" "[?](W!)" "|" "[X](D!)")
+          (sequence "|" "OKAY(o!)" "YES(y!)" "NO(n!)"))))
+
+(use-package org-roam
+  :defer t
+  :init
+  (setq org-roam-directory (file-truename "~/org")))
+
+
 (use-package page-break-lines
   :init
   (page-break-lines-mode))
@@ -250,9 +270,26 @@
 
 (use-package projectile
   :init
-  (setq projectile-project-search-path '("~/external/" "~/internal/" ("~/projects" . 2))))
+  (setq projectile-project-search-path '("~/external/" "~/internal/" ("~/projects" . 2))
+        projectile-enable-caching t)
+  (projectile-mode))
 
-(use-package pulsar)
+(use-package pulsar
+  :config
+  (setq pulsar-pulse t)
+  (setq pulsar-delay 0.055)
+  (setq pulsar-iterations 10)
+  (setq pulsar-face 'pulsar-magenta)
+  (setq pulsar-highlight-face 'pulsar-yellow)
+  (add-hook 'minibuffer-setup-hook #'pulsar-pulse-line)
+  ;; integration with the `consult' package:
+  (add-hook 'consult-after-jump-hook #'pulsar-recenter-top)
+  (add-hook 'consult-after-jump-hook #'pulsar-reveal-entry)
+
+  ;; integration with the built-in `imenu':
+  (add-hook 'imenu-after-jump-hook #'pulsar-recenter-top)
+  (add-hook 'imenu-after-jump-hook #'pulsar-reveal-entry)
+  (pulsar-global-mode 1))
 
 (use-package rainbow-delimiters
   :init
@@ -278,26 +315,26 @@
     (when (and (listp elt) (eq (car elt) 'remap))
       (setf (cddr elt) (assq-delete-all 'find-file (cddr elt))))))
 
-(use-package vertico-posframe
-  :after vertico
-  :config
-  (vertico-posframe-mode 1)
-  (setq vertico-multiform-commands
-        '((consult-line
-           posframe
-           (vertico-posframe-poshandler . posframe-poshandler-frame-top-center)
-           (vertico-posframe-border-width . 10)
-           ;; NOTE: This is useful when emacs is used in both in X and
-           ;; terminal, for posframe do not work well in terminal, so
-           ;; vertico-buffer-mode will be used as fallback at the
-           ;; moment.
-           (vertico-posframe-fallback-mode . vertico-buffer-mode))
-          (t posframe)))
-  (setq vertico-posframe-parameters
-        '((left-fringe . 8)
-          (right-fringe . 8)))
-  (setq vertico-posframe-border-width 3)
-  (vertico-multiform-mode 1))
+;; (use-package vertico-posframe
+;;   :after vertico
+;;   :config
+;;   (vertico-posframe-mode 1)
+;;   (setq vertico-multiform-commands
+;;         '((consult-line
+;;            posframe
+;;            (vertico-posframe-poshandler . posframe-poshandler-frame-top-center)
+;;            (vertico-posframe-border-width . 10)
+;;            ;; NOTE: This is useful when emacs is used in both in X and
+;;            ;; terminal, for posframe do not work well in terminal, so
+;;            ;; vertico-buffer-mode will be used as fallback at the
+;;            ;; moment.
+;;            (vertico-posframe-fallback-mode . vertico-buffer-mode))
+;;           (t posframe)))
+;;   (setq vertico-posframe-parameters
+;;         '((left-fringe . 8)
+;;           (right-fringe . 8)))
+;;   (setq vertico-posframe-border-width 3)
+;;   (vertico-multiform-mode 1))
 ;; keyboard-escape-quit
 ;; (abort-recursive-edit)
 
@@ -316,10 +353,6 @@
 
 
 
-(setq org-todo-keywords
-      '((sequence "TODO(t!)" "PROJ(p!)" "LOOP(r!)" "STRT(s!)" "WAIT(w!)" "HOLD(h!)" "IDEA(i!)" "|" "DONE(d!)" "KILL(k!)")
-        (sequence "[ ](T!)" "[-](S!)" "[?](W!)" "|" "[X](D!)")
-        (sequence "|" "OKAY(o!)" "YES(y!)" "NO(n!)")))
 
 
 ;;; Universal, non-nuclear escape
@@ -371,13 +404,13 @@ all hooks after it are ignored.")
   (other-window 1))
 
 (gk/evil-keys dired-mode-map
-  "-" 'dired-up-directory)
+              "-" 'dired-up-directory)
 
 (gk/evil-keys magit-mode-map
-  "h" 'evil-backward-char
-  "j" 'evil-next-visual-line
-  "k" 'evil-previous-line
-  "l" 'evil-forward-char)
+              "h" 'evil-backward-char
+              "j" 'evil-next-visual-line
+              "k" 'evil-previous-line
+              "l" 'evil-forward-char)
 
 ;; (gk/evil-keys
 ;;   "gcc" 'evilnc-comment-or-uncomment-lines)
@@ -386,20 +419,20 @@ all hooks after it are ignored.")
 ;;   "gc" 'evilnc-comment-or-uncomment-lines)
 
 (gk/leader-keys
-  "SPC" '(projectile-find-file :wk "find file in project")
-  "b" '(:keymap ibuffer-mode-map)
-  "bb" '(switch-to-buffer :wk "switch to buffer")
-  "f" '(:ignore t :wk "file")
-  "fd" '(dired-jump :wk "open dired")
-  "ff" '(find-file :wk "find file")
-  "fs" '(save-buffer :wk "save file")
-  ;; "h" '(:ignore t :wk "help")
-  "h" '(:keymap help-map :wk "help")
-  ;; "hf" '(describe-function :wk "describe function")
-  ;; "hk" '(helpful-key :wk "describe key")
-  ;; "hv" '(describe-variable :wk "describe variable")
-  ;; "hm" '(describe-mode :wk "describe mode")
-  "gg" '(magit-status :wk "magit")
-  "p" '(:keymap projectile-command-map)
-  ;; "w" '(:ignore t :wk "window")
-  "w" '(:keymap evil-window-map :wk "window"))
+ "SPC" '(projectile-find-file :wk "find file in project")
+ "b" '(:keymap ibuffer-mode-map)
+ "bb" '(switch-to-buffer :wk "switch to buffer")
+ "f" '(:ignore t :wk "file")
+ "fd" '(dired-jump :wk "open dired")
+ "ff" '(find-file :wk "find file")
+ "fs" '(save-buffer :wk "save file")
+ ;; "h" '(:ignore t :wk "help")
+ "h" '(:keymap help-map :wk "help")
+ ;; "hf" '(describe-function :wk "describe function")
+ ;; "hk" '(helpful-key :wk "describe key")
+ ;; "hv" '(describe-variable :wk "describe variable")
+ ;; "hm" '(describe-mode :wk "describe mode")
+ "gg" '(magit-status :wk "magit")
+ "p" '(:keymap projectile-command-map)
+ ;; "w" '(:ignore t :wk "window")
+ "w" '(:keymap evil-window-map :wk "window"))
