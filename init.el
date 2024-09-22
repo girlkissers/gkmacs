@@ -1,4 +1,4 @@
-;; -*- no-byte-compile: t; -*-
+;;; init.el -*- lexical-binding: t; -*-
 
 (defvar elpaca-installer-version 0.7)
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
@@ -45,6 +45,11 @@
         ;; Assume :elpaca t unless otherwise specified.
         (setq elpaca-use-package-by-default t))
 
+(use-package benchmark-init
+  :ensure t
+  :config
+  ;; To disable collection of benchmark data after init is done.
+  (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
 (use-package base16-theme
   :config
@@ -64,3 +69,7 @@
 (setq display-line-numbers-mode 'relative)
 (menu-bar--display-line-numbers-mode-relative)
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+(setopt use-short-answers t) 
+(org-roam-db-autosync-mode)
+(setq auto-save-file-name-transforms
+      `((".*" "/tmp/gkmacs/" t)))
