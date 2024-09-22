@@ -200,8 +200,6 @@
 ;; (gk/local-leader-keys
 ;;  "m" 'test-rond)
 
-(fset 'map! 'general-def)
-
 (gk/evil-keys dired-mode-map
               "-" 'dired-up-directory)
 
