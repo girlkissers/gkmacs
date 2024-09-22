@@ -25,6 +25,7 @@
   :config
   ;; Manual preview key for `affe-grep'
   (consult-customize affe-grep :preview-key "M-."))
+
 (use-package avy)
 
 (use-package anzu
@@ -122,15 +123,24 @@
 
   (add-to-list 'evil-motion-state-modes 'dired-mode)
   (add-to-list 'evil-motion-state-modes 'Custom-mode)
+  (add-to-list 'evil-motion-state-modes 'ibuffer-mode)
+  (setq evil-kill-on-visual-paste nil)
   (evil-mode 1))
 
 (use-package evil-collection
   :after evil
   :init
   :custom (evil-collection-setup-minibuffer t)
-  (evil-collection-init))
+  (evil-collection-init)
+  (evil-collection-ibuffer-setup))
+
+
 
 (use-package evil-goggles)
+
+(use-package evil-nerd-commenter
+  :init
+  (evilnc-default-hotkeys))
 
 (use-package evil-surround
   :config
