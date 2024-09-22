@@ -75,6 +75,8 @@
                                    (registers . "e")))
   (dashboard-setup-startup-hook))
 
+(use-package dumb-jump)
+
 (use-package embark
   :ensure t
 
