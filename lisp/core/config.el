@@ -228,6 +228,10 @@
 ;; keyboard-escape-quit
 ;; (abort-recursive-edit)
 
+(use-package wakatime-mode
+  :init
+  (global-wakatime-mode))
+
 (use-package which-key
   :config
   (which-key-mode 1))
