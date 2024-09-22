@@ -45,6 +45,7 @@
         ;; Assume :elpaca t unless otherwise specified.
         (setq elpaca-use-package-by-default t))
 
+
 (use-package base16-theme
   :config
   (load-theme 'base16-oxocarbon-dark t))
@@ -63,4 +64,3 @@
 (setq display-line-numbers-mode 'relative)
 (menu-bar--display-line-numbers-mode-relative)
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-

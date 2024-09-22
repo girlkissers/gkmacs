@@ -164,7 +164,11 @@
   (vertico-resize nil)
   :init
   (vertico-mode)
-  (savehist-mode))
+  (savehist-mode)
+
+  (dolist (elt ido-minor-mode-map-entry)
+    (when (and (listp elt) (eq (car elt) 'remap))
+      (setf (cddr elt) (assq-delete-all 'find-file (cddr elt))))))
 
 (use-package vertico-posframe
   :after vertico
