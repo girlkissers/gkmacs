@@ -52,3 +52,4 @@ flycheck_*.el
 /parinfer-rust/
 /recentf
 /undo-fu-session/
+/.persistent-scratch
