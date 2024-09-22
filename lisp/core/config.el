@@ -168,14 +168,49 @@
 
 (use-package helpful)
 
-(use-package projectile)
 
+
+(use-package ghub)
 (use-package magit
-  :ensure t)
+  :init
+  (add-hook 'git-commit-mode-hook 'evil-insert-state))
+
+
+
 
 (use-package marginalia
   :init
   (marginalia-mode))
+
+(use-package nerd-icons)
+
+(use-package nerd-icons-completion
+  :config
+  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup)
+  (nerd-icons-completion-mode))
+
+(use-package nerd-icons-corfu
+  :config
+  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter)
+
+  ;; Optionally:
+  (setq nerd-icons-corfu-mapping
+        '((array :style "cod" :icon "symbol_array" :face font-lock-type-face)
+          (boolean :style "cod" :icon "symbol_boolean" :face font-lock-builtin-face)
+          ;; ...
+          (t :style "cod" :icon "code" :face font-lock-warning-face))))
+;; Remember to add an entry for `t', the library uses that as default.
+
+;; The Custom interface is also supported for tuning the variable above.
+
+
+(use-package nerd-icons-dired
+  :hook
+  (dired-mode . nerd-icons-dired-mode))
+
+(use-package nerd-icons-ibuffer
+  :ensure t
+  :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
 
 ;; Optionally use the `orderless' completion style.
 (use-package orderless
@@ -186,6 +221,44 @@
   (completion-styles '(orderless basic))
   (completion-category-defaults nil)
   (completion-category-overrides '((file (styles partial-completion)))))
+
+(use-package page-break-lines
+  :init
+  (page-break-lines-mode))
+
+(use-package parinfer-rust-mode
+  :hook emacs-lisp-mode)
+
+(use-package persistent-scratch
+  :init
+  (persistent-scratch-setup-default))
+
+(use-package popper
+  :ensure t ; or :straight t
+  :bind (("C-`"   . popper-toggle)
+         ("M-`"   . popper-cycle)
+         ("C-M-`" . popper-toggle-type))
+  :init
+  (setq popper-reference-buffers
+        '("\\*Messages\\*"
+          "Output\\*$"
+          "\\*Async Shell Command\\*"
+          help-mode
+          compilation-mode))
+  (popper-mode +1)
+  (popper-echo-mode +1))                ; For echo area hints
+
+(use-package projectile
+  :init
+  (setq projectile-project-search-path '("~/external/" "~/internal/" ("~/projects" . 2))))
+
+(use-package pulsar)
+
+(use-package rainbow-delimiters
+  :init
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+
+(use-package transient)
 
 (use-package undo-fu-session
   :config
@@ -239,22 +312,94 @@
 ;; (gk/local-leader-keys
 ;;  "m" 'test-rond)
 
+(general-auto-unbind-keys)
+
+
+
+(setq org-todo-keywords
+      '((sequence "TODO(t!)" "PROJ(p!)" "LOOP(r!)" "STRT(s!)" "WAIT(w!)" "HOLD(h!)" "IDEA(i!)" "|" "DONE(d!)" "KILL(k!)")
+        (sequence "[ ](T!)" "[-](S!)" "[?](W!)" "|" "[X](D!)")
+        (sequence "|" "OKAY(o!)" "YES(y!)" "NO(n!)")))
+
+
+;;; Universal, non-nuclear escape
+
+;; `keyboard-quit' is too much of a nuclear option. I wanted an ESC/C-g to
+;; do-what-I-mean. It serves four purposes (in order):
+;;
+;; 1. Quit active states; e.g. highlights, searches, snippets, iedit,
+;;    multiple-cursors, recording macros, etc.
+;; 2. Close popup windows remotely (if it is allowed to)
+;; 3. Refresh buffer indicators, like diff-hl and flycheck
+;; 4. Or fall back to `keyboard-quit'
+;;
+;; And it should do these things incrementally, rather than all at once. And it
+;; shouldn't interfere with recording macros or the minibuffer. This may require
+;; you press ESC/C-g two or three times on some occasions to reach
+;; `keyboard-quit', but this is much more intuitive.
+
+(defvar doom-escape-hook nil
+  "A hook run when C-g is pressed (or ESC in normal mode, for evil users).
+
+More specifically, when `doom/escape' is pressed. If any hook returns non-nil,
+all hooks after it are ignored.")
+
+(defun doom/escape (&optional interactive)
+  "Run `doom-escape-hook'."
+  (interactive (list 'interactive))
+  (let ((inhibit-quit t))
+    (cond ((minibuffer-window-active-p (minibuffer-window))
+           ;; quit the minibuffer if open.
+           (when interactive
+             (setq this-command 'abort-recursive-edit))
+           (abort-recursive-edit))
+          ;; Run all escape hooks. If any returns non-nil, then stop there.
+          ((run-hook-with-args-until-success 'doom-escape-hook))
+          ;; don't abort macros
+          ((or defining-kbd-macro executing-kbd-macro) nil)
+          ;; Back to the default
+          ((unwind-protect (keyboard-quit)
+             (when interactive
+               (setq this-command 'keyboard-quit)))))))
+
+(global-set-key [remap keyboard-quit] #'doom/escape)
+
+(with-eval-after-load 'eldoc
+  (eldoc-add-command 'doom/escape))
+
+(defadvice split-window (after split-window-after activate)
+  (other-window 1))
+
 (gk/evil-keys dired-mode-map
-              "-" 'dired-up-directory)
+  "-" 'dired-up-directory)
+
+(gk/evil-keys magit-mode-map
+  "h" 'evil-backward-char
+  "j" 'evil-next-visual-line
+  "k" 'evil-previous-line
+  "l" 'evil-forward-char)
+
+;; (gk/evil-keys
+;;   "gcc" 'evilnc-comment-or-uncomment-lines)
+
+;; (gk/evil-keys
+;;   "gc" 'evilnc-comment-or-uncomment-lines)
 
 (gk/leader-keys
- "SPC" '(projectile-find-file :wk "find file in project")
- "b" '(:keymap ibuffer-mode-map)
- "f" '(:ignore t :wk "file")
- "fd" '(dired-jump :wk "open dired")
- "ff" '(find-file :wk "find file")
- "fs" '(save-buffer :wk "save file")
- ;; "h" '(:ignore t :wk "help")
- "h" '(:keymap help-map :wk "help")
- ;; "hf" '(describe-function :wk "describe function")
- ;; "hk" '(helpful-key :wk "describe key")
- ;; "hv" '(describe-variable :wk "describe variable")
- ;; "hm" '(describe-mode :wk "describe mode")
- "p" '(:keymap projectile-command-map)
- ;; "w" '(:ignore t :wk "window")
- "w" '(:keymap evil-window-map :wk "window"))
+  "SPC" '(projectile-find-file :wk "find file in project")
+  "b" '(:keymap ibuffer-mode-map)
+  "bb" '(switch-to-buffer :wk "switch to buffer")
+  "f" '(:ignore t :wk "file")
+  "fd" '(dired-jump :wk "open dired")
+  "ff" '(find-file :wk "find file")
+  "fs" '(save-buffer :wk "save file")
+  ;; "h" '(:ignore t :wk "help")
+  "h" '(:keymap help-map :wk "help")
+  ;; "hf" '(describe-function :wk "describe function")
+  ;; "hk" '(helpful-key :wk "describe key")
+  ;; "hv" '(describe-variable :wk "describe variable")
+  ;; "hm" '(describe-mode :wk "describe mode")
+  "gg" '(magit-status :wk "magit")
+  "p" '(:keymap projectile-command-map)
+  ;; "w" '(:ignore t :wk "window")
+  "w" '(:keymap evil-window-map :wk "window"))
