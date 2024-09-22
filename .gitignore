@@ -49,3 +49,6 @@ flycheck_*.el
 /tramp
 /transient/
 /var/
+/parinfer-rust/
+/recentf
+/undo-fu-session/
