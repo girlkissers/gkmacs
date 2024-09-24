@@ -397,6 +397,15 @@ all hooks after it are ignored.")
 
 (global-set-key [remap keyboard-quit] #'doom/escape)
 
+;;;###autoload
+(defun +evil-escape-a (&rest _)
+  "Call `doom/escape' if `evil-force-normal-state' is called interactively."
+  (when (called-interactively-p 'any)
+    (call-interactively #'doom/escape)))
+
+(advice-add #'evil-force-normal-state :after #'+evil-escape-a)
+(advice-add #'evil-force-normal-state :after #'anzu--reset-status)
+
 (with-eval-after-load 'eldoc
   (eldoc-add-command 'doom/escape))
 
