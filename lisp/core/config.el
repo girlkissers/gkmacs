@@ -364,6 +364,8 @@
 
 (use-package transient)
 
+(use-package undo-fu)
+
 (use-package undo-fu-session
   :init
   (undo-fu-session-global-mode))
