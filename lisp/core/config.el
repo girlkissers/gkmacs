@@ -295,10 +295,63 @@
   :init
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
+;;;; Rainbow mode for colour previewing (rainbow-mode.el)
+(use-package rainbow-mode
+  :ensure t
+  :init
+  (setq rainbow-ansi-colors nil)
+  (setq rainbow-x-colors nil)
+
+  (defun prot/rainbow-mode-in-themes ()
+    (when-let ((file (buffer-file-name))
+               ((derived-mode-p 'emacs-lisp-mode))
+               ((string-match-p "-theme" file)))
+      (rainbow-mode 1)))
+  :bind ( :map ctl-x-x-map
+          ("c" . rainbow-mode)) ; C-x x c
+  :hook (emacs-lisp-mode . prot/rainbow-mode-in-themes))
+
+
+(use-package smartparens
+  :hook (prog-mode text-mode markdown-mode) ;; add `smartparens-mode` to these hooks
+  :config
+  ;; load default config
+  (require 'smartparens-config))
+
+;;;; Increase padding of windows/frames
+;; <https://protesilaos.com/codelog/2023-06-03-emacs-spacious-padding/>.
+(use-package spacious-padding
+  :ensure t
+  :if (display-graphic-p)
+  :hook (after-init . spacious-padding-mode)
+  :bind ("<f8>" . spacious-padding-mode)
+  :init
+  ;; These are the defaults, but I keep it here for visiibility.
+  (setq spacious-padding-widths
+        '( :internal-border-width 30
+           :header-line-width 4
+           :mode-line-width 6
+           :tab-width 4
+           :right-divider-width 30
+           :scroll-bar-width 8
+           :left-fringe-width 20
+           :right-fringe-width 20))
+
+  ;; (setq spacious-padding-subtle-mode-line
+  ;;       `( :mode-line-active ,(if (or (eq prot-emacs-load-theme-family 'modus)
+  ;;                                     (eq prot-emacs-load-theme-family 'standard))
+  ;;                                 'default
+  ;;                               'help-key-binding)
+  ;;          :mode-line-inactive window-divider))
+
+  ;; Read the doc string of `spacious-padding-subtle-mode-line' as
+  ;; it is very flexible.
+  (setq spacious-padding-subtle-mode-line '(:mode-line-active "#37f499" :mode-line-inactive shadow)))
+
 (use-package transient)
 
 (use-package undo-fu-session
-  :config
+  :init
   (undo-fu-session-global-mode))
 
 (use-package vertico
