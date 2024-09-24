@@ -122,6 +122,7 @@
   :ensure (:wait t)
   :init
   (setq evil-want-keybinding nil)
+  (setq evil-undo-system 'undo-fu)
   :config
   (setq evil-emacs-state-modes (delq 'ibuffer-mode evil-emacs-state-modes))
 
@@ -219,6 +220,19 @@
 (use-package nerd-icons-ibuffer
   :ensure t
   :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
+
+(use-package ob-mermaid
+  :defer t
+  :config
+  (add-to-list 'org-babel-load-languages '(mermaid . t))
+  (setq ob-mermaid-cli-path "/usr/bin/mmdc"))
+
+(use-package org-modern
+  :init
+  (with-eval-after-load 'org (global-org-modern-mode)))
+
+;; (use-package org-superstar)
+;; (use-package org-fancy-priorities)
 
 ;; Optionally use the `orderless' completion style.
 (use-package orderless
