@@ -413,13 +413,13 @@ all hooks after it are ignored.")
   (other-window 1))
 
 (gk/evil-keys dired-mode-map
-              "-" 'dired-up-directory)
+  "-" 'dired-up-directory)
 
 (gk/evil-keys magit-mode-map
-              "h" 'evil-backward-char
-              "j" 'evil-next-visual-line
-              "k" 'evil-previous-line
-              "l" 'evil-forward-char)
+  "h" 'evil-backward-char
+  "j" 'evil-next-visual-line
+  "k" 'evil-previous-line
+  "l" 'evil-forward-char)
 
 ;; (gk/evil-keys
 ;;   "gcc" 'evilnc-comment-or-uncomment-lines)
