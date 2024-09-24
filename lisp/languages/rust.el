@@ -7,18 +7,16 @@
 ;;             ;; Show all eldoc feedback.
 ;;             (setq eldoc-documentation-strategy #'eldoc-documentation-compose)))
 ;;
-;;;###autoload
-(defun gk//load-package-rust ()
-  (use-package rustic
-    :init
-    (setq rustic-lsp-client 'eglot))
+(use-package rustic
+  :init
+  (setq rustic-lsp-client 'eglot))
 
-  ;; :init)
-  ;; (setq sideline-backends-right '(sideline-eglot)))
-  (use-package eldoc-box)
-  (use-package sideline-flymake
-    :hook (flymake-mode . sideline-mode)
-    :init
-    (setq sideline-flymake-display-mode 'line) ; 'point to show errors only on point
+;; :init)
+;; (setq sideline-backends-right '(sideline-eglot)))
+(use-package eldoc-box)
+(use-package sideline-flymake
+  :hook (flymake-mode . sideline-mode)
+  :init
+  (setq sideline-flymake-display-mode 'line) ; 'point to show errors only on point
                                         ; 'line to show errors on the current line
-    (setq sideline-backends-right '(sideline-flymake))))
+  (setq sideline-backends-right '(sideline-flymake)))
