@@ -406,6 +406,7 @@
   :init
   (vertico-mode)
   (savehist-mode)
+  (setq ido-mode nil)
 
   (dolist (elt ido-minor-mode-map-entry)
     (when (and (listp elt) (eq (car elt) 'remap))
