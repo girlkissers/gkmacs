@@ -244,6 +244,9 @@
   :ensure t
   :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
 
+(use-package nix-mode
+  :mode "\\.nix\\'")
+
 (use-package ob-mermaid
   :defer t
   :config
