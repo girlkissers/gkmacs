@@ -170,6 +170,7 @@
   :ensure (:wait t)
   :config
   (general-evil-setup)
+  (general-auto-unbind-keys)
 
   (general-define-key
    :states '(normal visual motion)
