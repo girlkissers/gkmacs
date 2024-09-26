@@ -5,9 +5,9 @@
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
 (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
 (defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
-                       :ref nil :depth 1
-                       :files (:defaults "elpaca-test.el" (:exclude "extensions"))
-                       :build (:not elpaca--activate-package)))
+                              :ref nil :depth 1
+                              :files (:defaults "elpaca-test.el" (:exclude "extensions"))
+                              :build (:not elpaca--activate-package)))
 (let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
        (build (expand-file-name "elpaca/" elpaca-builds-directory))
        (order (cdr elpaca-order))
@@ -40,10 +40,10 @@
 (elpaca `(,@elpaca-order))
 ;; Install use-package support
 (elpaca elpaca-use-package
-        ;; Enable use-package :ensure support for Elpaca.
-        (elpaca-use-package-mode)
-        ;; Assume :elpaca t unless otherwise specified.
-        (setq elpaca-use-package-by-default t))
+  ;; Enable use-package :ensure support for Elpaca.
+  (elpaca-use-package-mode)
+  ;; Assume :elpaca t unless otherwise specified.
+  (setq elpaca-use-package-by-default t))
 
 (use-package benchmark-init
   :ensure t
@@ -63,7 +63,13 @@
 ;; mapc uses the function, in this case "load" on each instance of the second parameter
 ;; from documentation of "file-expand-wildcards": This returns a list of file names that match PATTERN.
 (mapc 'load (file-expand-wildcards (expand-file-name "lisp/*/*.el" user-emacs-directory)))
-(setq backup-directory-alist `(("." . ,"/tmp/gkmacs")))
+;; f-directory-p is part of elpaca (:
+(defvar gk//tmpdir "/tmp/gkmacs/"
+  "Temp directory to use")
+(when (not (f-directory-p gk//tmpdir))
+  (make-directory gk//tmpdir))
+
+(setq backup-directory-alist `(("." . , gk//tmpdir)))
 ;; (global-display-line-numbers-mode +1)
 (setq display-line-numbers t)
 (setq display-line-numbers-mode 'relative)
