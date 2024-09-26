@@ -59,6 +59,7 @@
   :init
   (setq corfu-auto t
         corfu-quit-no-match t)
+  (corfu-popupinfo-mode)
   (global-corfu-mode))
 
 (use-package consult
