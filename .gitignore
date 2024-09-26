@@ -53,3 +53,5 @@ flycheck_*.el
 /recentf
 /undo-fu-session/
 /.persistent-scratch
+org-roam.db
+projects
