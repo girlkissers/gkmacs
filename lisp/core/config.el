@@ -80,6 +80,8 @@
                                    (registers . "e")))
   (dashboard-setup-startup-hook))
 
+(use-package denote)
+
 (use-package dumb-jump)
 
 (use-package embark
