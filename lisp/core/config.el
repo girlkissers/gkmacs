@@ -271,6 +271,7 @@
   (completion-category-overrides '((file (styles partial-completion)))))
 
 (with-eval-after-load 'org
+  (setq org-return-follows-link  t)
   (setq org-todo-keywords
         '((sequence "TODO(t!)" "PROJ(p!)" "LOOP(r!)" "STRT(s!)" "WAIT(w!)" "HOLD(h!)" "IDEA(i!)" "|" "DONE(d!)" "KILL(k!)")
           (sequence "[ ](T!)" "[-](S!)" "[?](W!)" "|" "[X](D!)")
@@ -509,6 +510,9 @@ all hooks after it are ignored.")
 
 (gk/evil-keys dired-mode-map
   "-" 'dired-up-directory)
+
+(gk/evil-keys org-mode-map
+  "RET" 'org-return-and-maybe-indent)
 
 (gk/evil-keys magit-mode-map
   "h" 'evil-backward-char
