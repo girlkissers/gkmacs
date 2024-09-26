@@ -190,6 +190,13 @@
 (use-package helpful
   :defer t)
 
+(use-package link-hint
+  :ensure t
+  :defer t
+  :init
+  (define-key evil-normal-state-map (kbd "SPC f") 'link-hint-open-link))
+
+
 
 
 (use-package ghub
