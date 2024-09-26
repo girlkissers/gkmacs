@@ -547,3 +547,5 @@ all hooks after it are ignored.")
   "p" '(:keymap projectile-command-map)
   ;; "w" '(:ignore t :wk "window")
   "w" '(:keymap evil-window-map :wk "window"))
+
+(set-frame-font "Mononoki Nerd Font 8" nil t)
