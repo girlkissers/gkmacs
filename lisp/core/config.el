@@ -137,6 +137,7 @@
   :ensure (:wait t)
   :init
   (setq evil-want-keybinding nil)
+  (setq evil-want-C-i-jump nil)
   (setq evil-undo-system 'undo-fu)
   :config
   (setq evil-emacs-state-modes (delq 'ibuffer-mode evil-emacs-state-modes))
@@ -412,6 +413,8 @@
     (when (and (listp elt) (eq (car elt) 'remap))
       (setf (cddr elt) (assq-delete-all 'find-file (cddr elt))))))
 
+(use-package vterm)
+
 ;; (use-package vertico-posframe
 ;;   :after vertico
 ;;   :config
@@ -548,4 +551,4 @@ all hooks after it are ignored.")
   ;; "w" '(:ignore t :wk "window")
   "w" '(:keymap evil-window-map :wk "window"))
 
-(set-frame-font "Mononoki Nerd Font 8" nil t)
+(set-frame-font "Mononoki Nerd Font 9" nil t)
