@@ -1,6 +1,11 @@
 * Inbox
-** TODO Avy
+** DONE Avy
+- State "DONE"       from "TODO"       [2024-09-30 Mon 16:28]
 ** TODO Custom Theme
-** TODO Company
-** TODO Eglot
+** DONE Eglot
+- State "DONE"       from "TODO"       [2024-09-30 Mon 16:28]
 ** TODO Make focus on center of screen
+** TODO Local mode map for: [0/3]
+*** TODO Vlang
+*** TODO Rust 
+*** TODO Org
