@@ -302,7 +302,7 @@
 
 (use-package page-break-lines
   :init
-  (page-break-lines-mode))
+  (global-page-break-lines-mode))
 
 (use-package parinfer-rust-mode
   :hook emacs-lisp-mode)
