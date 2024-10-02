@@ -19,6 +19,16 @@
 ;;
 ;;; Code:
 
+(use-package elnode
+  :ensure (:wait t))
+
+
+(use-package org-gcal
+  :ensure (:wait t)
+  :init
+  (load (expand-file-name "private.el" user-emacs-directory)))
+
+(use-package org-super-agenda)
 
 (use-package affe
   :after consult
