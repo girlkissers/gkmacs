@@ -147,14 +147,16 @@
   :ensure (:wait t)
   :init
   (setq evil-want-keybinding nil)
+  (setq evil-want-C-u-scroll t)
   (setq evil-want-C-i-jump nil)
   (setq evil-undo-system 'undo-fu)
   :config
-  (setq evil-emacs-state-modes (delq 'ibuffer-mode evil-emacs-state-modes))
+  (evil-set-initial-state 'dashboard-mode 'normal)
+  ;; (setq evil-emacs-state-modes (delq 'ibuffer-mode evil-emacs-state-modes))
 
-  (add-to-list 'evil-motion-state-modes 'dired-mode)
-  (add-to-list 'evil-motion-state-modes 'Custom-mode)
-  (add-to-list 'evil-motion-state-modes 'ibuffer-mode)
+  ;; (add-to-list 'evil-motion-state-modes 'dired-mode)
+  ;; (add-to-list 'evil-motion-state-modes 'Custom-mode)
+  ;; (add-to-list 'evil-motion-state-modes 'ibuffer-mode)
   (setq evil-kill-on-visual-paste nil)
   (evil-mode 1))
 
