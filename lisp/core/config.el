@@ -556,9 +556,11 @@ all hooks after it are ignored.")
 
 
 (gk/leader-keys
+  "/" '(evilnc-comment-or-uncomment-lines :wk "comment/uncomment")
   "SPC" '(projectile-find-file :wk "find file in project")
   "b" '(:keymap ibuffer-mode-map)
   "bb" '(switch-to-buffer :wk "switch to buffer")
+  "bi" '(ibuffer :wk "ibuffer")
   "f" '(:ignore t :wk "file")
   "fd" '(dired-jump :wk "open dired")
   "ff" '(find-file :wk "find file")
