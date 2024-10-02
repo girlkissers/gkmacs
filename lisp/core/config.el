@@ -198,7 +198,11 @@
     :states '(normal insert visual emacs)
     :prefix ",")
   (general-create-definer gk/evil-keys
-    :states '(normal insert visual emacs)))
+    :states '(normal insert visual emacs))
+  (general-create-definer gk/evil-m-keys
+    :states '(motion))
+  (general-create-definer gk/evil-v-keys
+    :states '(visual)))
 
 (use-package helpful
   :defer t)
