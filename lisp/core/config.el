@@ -540,6 +540,14 @@ all hooks after it are ignored.")
   "k" 'evil-previous-line
   "l" 'evil-forward-char)
 
+(gk/evil-m-keys prog-mode-map
+  "gcc" 'evilnc-comment-or-uncomment-lines)
+
+(gk/evil-v-keys prog-mode-map
+  "gc" 'evilnc-comment-operator) 
+
+
+
 ;; (gk/evil-keys
 ;;   "gcc" 'evilnc-comment-or-uncomment-lines)
 
