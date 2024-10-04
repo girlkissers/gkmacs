@@ -23,5 +23,7 @@
   :init
   (apheleia-global-mode +1))
 
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+
 (provide 'config)
 ;;; config.el ends here
