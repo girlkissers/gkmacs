@@ -19,12 +19,22 @@
 ;;
 ;;; Code:
 
+(defun +elpaca-unload-seq (e)
+  (and (featurep 'seq) (unload-feature 'seq t))
+  (elpaca--continue-build e))
+
+(defun +elpaca-seq-build-steps ()
+  (append (butlast (if (file-exists-p (expand-file-name "seq" elpaca-builds-directory))
+                       elpaca--pre-built-steps elpaca-build-steps))
+          (list '+elpaca-unload-seq 'elpaca--activate-package)))
+
+(use-package seq :ensure `(seq :build ,(+elpaca-seq-build-steps)))
+
 (use-package elnode
   :ensure (:wait t))
 
 
 (use-package org-gcal
-  :ensure (:wait t)
   :init
   (load (expand-file-name "private.el" user-emacs-directory)))
 
