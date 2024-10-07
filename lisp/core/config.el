@@ -360,6 +360,12 @@
   (popper-mode +1)
   (popper-echo-mode +1))                ; For echo area hints
 
+(use-package perspective
+  :init
+  (setq persp-suppress-no-prefix-key-warning t)
+  (add-hook 'kill-emacs-hook #'persp-state-save)
+  (persp-mode))
+
 (use-package projectile
   :init
   (setq projectile-project-search-path '("~/external/" "~/internal/" ("~/projects" . 2))
@@ -591,13 +597,13 @@ all hooks after it are ignored.")
 (defadvice split-window (after split-window-after activate)
   (other-window 1))
 
+(use-package org-bullets
+  :init
+  (add-hook 'org-mode-hook #'org-bullets-mode))
 
 ;; (set-frame-font "Mononoki Nerd Font 9" nil t)
 (set-frame-font "Iosevka Comfy 10" nil t)
 
-(use-package org-bullets
-  :init
-  (add-hook 'org-mode-hook #'org-bullets-mode))
 
 ;; (custom-set-faces
 ;;  '(org-level-1 ((t (:inherit outline-1 :height 1.75))))
