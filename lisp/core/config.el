@@ -587,59 +587,26 @@ all hooks after it are ignored.")
 (advice-add #'evil-force-normal-state :after #'+evil-escape-a)
 (advice-add #'evil-force-normal-state :after #'anzu--reset-status)
 
-(with-eval-after-load 'eldoc
-  (eldoc-add-command 'doom/escape))
 
 (defadvice split-window (after split-window-after activate)
   (other-window 1))
 
-(gk/evil-keys dired-mode-map
-  "-" 'dired-up-directory)
 
-(gk/evil-keys org-mode-map
-  "RET" 'org-return-and-maybe-indent)
+;; (set-frame-font "Mononoki Nerd Font 9" nil t)
+(set-frame-font "Iosevka Comfy 10" nil t)
 
-(gk/evil-keys magit-mode-map
-  "h" 'evil-backward-char
-  "j" 'evil-next-visual-line
-  "k" 'evil-previous-line
-  "l" 'evil-forward-char)
+(use-package org-bullets
+  :init
+  (add-hook 'org-mode-hook #'org-bullets-mode))
 
-(gk/evil-m-keys prog-mode-map
-  "gcc" 'evilnc-comment-or-uncomment-lines)
-
-(gk/evil-v-keys prog-mode-map
-  "gc" 'evilnc-comment-operator) 
+;; (custom-set-faces
+;;  '(org-level-1 ((t (:inherit outline-1 :height 1.75))))
+;;  '(org-level-2 ((t (:inherit outline-2 :height 1.5))))
+;;  '(org-level-3 ((t (:inherit outline-3 :height 1.25))))
+;;  '(org-level-4 ((t (:inherit outline-4 :height 1.1))))
+;;  '(org-level-5 ((t (:inherit outline-5 :height 1.0)))))
 
 
-
-;; (gk/evil-keys
-;;   "gcc" 'evilnc-comment-or-uncomment-lines)
-
-;; (gk/evil-keys
-;;   "gc" 'evilnc-comment-or-uncomment-lines)
+;; (set-face-attribute 'org-document-title nil :height 2.0)
 
 
-(gk/leader-keys
-  "/" '(evilnc-comment-or-uncomment-lines :wk "comment/uncomment")
-  "SPC" '(projectile-find-file :wk "find file in project")
-  "b" '(:keymap ibuffer-mode-map)
-  "bb" '(switch-to-buffer :wk "switch to buffer")
-  "bi" '(ibuffer :wk "ibuffer")
-  "f" '(:ignore t :wk "file")
-  "fd" '(dired-jump :wk "open dired")
-  "ff" '(find-file :wk "find file")
-  "fs" '(save-buffer :wk "save file")
-  ;; "h" '(:ignore t :wk "help")
-  "h" '(:keymap help-map :wk "help")
-  "hf" '(helpful-callable :wk "describe function")
-  "hk" '(helpful-key :wk "describe key")
-  "hv" '(helpful-variable :wk "describe variable")
-  "hm" '(describe-mode :wk "describe mode")
-  "hx" '(helpful-command :wk "describe mode")
-  "gg" '(magit-status :wk "magit")
-  "p" '(:keymap projectile-command-map)
-  ;; "w" '(:ignore t :wk "window")
-  "w" '(:keymap evil-window-map :wk "window"))
-
-(set-frame-font "Mononoki Nerd Font 9" nil t)
