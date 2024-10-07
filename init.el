@@ -1,5 +1,33 @@
 ;;; init.el -*- lexical-binding: t; -*-
 
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(save-place-mode 1)
+(savehist-mode 1)
+(show-paren-mode 1)
+(setq-default indent-tabs-mode nil)
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward
+      save-interprogram-paste-before-kill t
+      apropos-do-all t
+      mouse-yank-at-point t
+      visible-bell t
+      load-prefer-newer t
+      backup-by-copying t
+      frame-inhibit-implied-resize t
+      ediff-window-setup-function 'ediff-setup-windows-plain
+      custom-file (expand-file-name "custom.el" user-emacs-directory))
+
+(unless backup-directory-alist
+  (defvar gk//tmpdir "/tmp/gkmacs/"
+    "Temp directory to use")
+  (when (not (file-directory-p gk//tmpdir))
+    (make-directory gk//tmpdir))
+
+  (setq backup-directory-alist `(("." . , gk//tmpdir))))
+
+
 (defvar elpaca-installer-version 0.7)
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
@@ -63,13 +91,10 @@
 ;; mapc uses the function, in this case "load" on each instance of the second parameter
 ;; from documentation of "file-expand-wildcards": This returns a list of file names that match PATTERN.
 (mapc 'load (file-expand-wildcards (expand-file-name "lisp/*/*.el" user-emacs-directory)))
-;; f-directory-p is part of elpaca (:
-(defvar gk//tmpdir "/tmp/gkmacs/"
-  "Temp directory to use")
-(when (not (f-directory-p gk//tmpdir))
-  (make-directory gk//tmpdir))
 
-(setq backup-directory-alist `(("." . , gk//tmpdir)))
+;; (mapc 'load (file-expand-wildcards (expand-file-name "lisp/external/nursery/*.el" user-emacs-directory)))
+
+
 ;; (global-display-line-numbers-mode +1)
 (setq display-line-numbers t)
 (setq display-line-numbers-mode 'relative)
