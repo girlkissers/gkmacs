@@ -52,7 +52,8 @@
   :init
   (global-anzu-mode +1))
 
-(use-package better-defaults)
+;; TODO Go through better-defaults and implement only what I want
+;; (use-package better-defaults)
 
 (use-package cape
   ;; Bind prefix keymap providing all Cape commands under a mnemonic key.
