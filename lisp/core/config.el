@@ -295,8 +295,18 @@
   (setq ob-mermaid-cli-path "/usr/bin/mmdc"))
 
 (use-package org-modern
-  :init
-  (with-eval-after-load 'org (global-org-modern-mode)))
+  :ensure t
+  :custom
+  (org-modern-hide-stars nil)    		; adds extra indentation
+  ;; (org-modern-table nil)
+  (org-modern-list 
+   '((?- . "-")
+     (?* . "•")
+     (?+ . "‣")))
+  (org-modern-block-name '("" . "")) ; or other chars; so top bracket is drawn promptly
+  :hook
+  (org-mode . org-modern-mode)
+  (org-agenda-finalize . org-modern-agenda))
 
 ;; (use-package org-superstar)
 ;; (use-package org-fancy-priorities)
