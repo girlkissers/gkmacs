@@ -1,11 +1,13 @@
 ;;; init.el -*- lexical-binding: t; -*-
 
+(global-hl-line-mode) ;; Highlight the current line in all buffers
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (save-place-mode 1)
 (savehist-mode 1)
 (show-paren-mode 1)
+(tooltip-mode -1) ;; Don't display tooltips as popups, use the echo area instead
 (setq-default indent-tabs-mode nil)
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward
@@ -19,6 +21,12 @@
       ediff-window-setup-function 'ediff-setup-windows-plain
       custom-file (expand-file-name "custom.el" user-emacs-directory))
 
+(defadvice keyboard-escape-quit
+    (around keyboard-escape-quit-dont-close-windows activate)
+  (let ((buffer-quit-function (lambda () ())))
+    ad-do-it))
+
+
 (unless backup-directory-alist
   (defvar gk//tmpdir "/tmp/gkmacs/"
     "Temp directory to use")
@@ -26,6 +34,9 @@
     (make-directory gk//tmpdir))
 
   (setq backup-directory-alist `(("." . , gk//tmpdir))))
+
+(column-number-mode) ;; Display column number in the mode line
+(recentf-mode) ;; Enable recording recently-visited files
 
 
 (defvar elpaca-installer-version 0.7)
