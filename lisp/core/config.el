@@ -463,11 +463,7 @@
   :init
   (vertico-mode)
   (savehist-mode)
-  (setq ido-mode nil)
-
-  (dolist (elt ido-minor-mode-map-entry)
-    (when (and (listp elt) (eq (car elt) 'remap))
-      (setf (cddr elt) (assq-delete-all 'find-file (cddr elt))))))
+  (setq ido-mode nil))
 
 (use-package vterm)
 
@@ -614,5 +610,3 @@ all hooks after it are ignored.")
 
 
 ;; (set-face-attribute 'org-document-title nil :height 2.0)
-
-
