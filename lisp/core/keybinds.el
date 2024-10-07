@@ -1,7 +1,7 @@
 
 (use-package general
   :ensure (:wait t)
-  :config
+  :init
   (general-evil-setup)
   (general-auto-unbind-keys)
 
@@ -73,6 +73,7 @@
 (gk/leader-keys
   "/" '(evilnc-comment-or-uncomment-lines :wk "comment/uncomment")
   "SPC" '(projectile-find-file :wk "find file in project")
+  "TAB" '(:keymap persp-mode-map)
   "b" '(:keymap ibuffer-mode-map)
   "bb" '(switch-to-buffer :wk "switch to buffer")
   "bi" '(ibuffer :wk "ibuffer")
