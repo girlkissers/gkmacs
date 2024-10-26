@@ -114,7 +114,35 @@
                                    (registers . "e")))
   (dashboard-setup-startup-hook))
 
-(use-package denote)
+(use-package denote
+  :init
+  (setq denote-directory (file-truename "~/org")))
+
+(use-package hl-todo
+  :init
+  (add-hook 'prog-mode-hook #'hl-todo-mode)
+  (setq hl-todo-highlight-punctuation ":"
+        hl-todo-keyword-faces
+        '(;; For reminders to change or add something at a later date.
+          ("TODO" warning bold)
+          ;; For code (or code paths) that are broken, unimplemented, or slow,
+          ;; and may become bigger problems later.
+          ("FIXME" error bold)
+          ;; For code that needs to be revisited later, either to upstream it,
+          ;; improve it, or address non-critical issues.
+          ("REVIEW" font-lock-keyword-face bold)
+          ;; For code smells where questionable practices are used
+          ;; intentionally, and/or is likely to break in a future update.
+          ("HACK" font-lock-constant-face bold)
+          ;; For sections of code that just gotta go, and will be gone soon.
+          ;; Specifically, this means the code is deprecated, not necessarily
+          ;; the feature it enables.
+          ("DEPRECATED" font-lock-doc-face bold)
+          ;; Extra keywords commonly found in the wild, whose meaning may vary
+          ;; from project to project.
+          ("NOTE" success bold)
+          ("BUG" error bold)
+          ("XXX" font-lock-constant-face bold))))
 
 (use-package dumb-jump)
 
@@ -360,11 +388,22 @@
   (popper-mode +1)
   (popper-echo-mode +1))                ; For echo area hints
 
-(use-package perspective
+(use-package persp-mode
   :init
-  (setq persp-suppress-no-prefix-key-warning t)
-  (add-hook 'kill-emacs-hook #'persp-state-save)
   (persp-mode))
+
+(with-eval-after-load 'persp-mode
+
+  (load (expand-file-name "lisp/gk/projectile-persp.el" user-emacs-directory))
+  (add-hook 'persp-mode-projectile-bridge-mode-hook
+            #'(lambda ()
+                (if persp-mode-projectile-bridge-mode
+                    (persp-mode-projectile-bridge-find-perspectives-for-all-buffers)
+                  (persp-mode-projectile-bridge-kill-perspectives))))
+  (add-hook 'after-init-hook
+            #'(lambda ()
+                (persp-mode-projectile-bridge-mode 1))
+            t) )
 
 (use-package projectile
   :init
@@ -596,6 +635,13 @@ all hooks after it are ignored.")
 (use-package org-bullets
   :init
   (add-hook 'org-mode-hook #'org-bullets-mode))
+
+(add-hook 'org-mode-hook #'org-indent-mode)
+
+(use-package xclip)
+
+(use-package lua-mode)
+
 
 ;; (set-frame-font "Mononoki Nerd Font 9" nil t)
 (set-frame-font "Iosevka Comfy 10" nil t)
