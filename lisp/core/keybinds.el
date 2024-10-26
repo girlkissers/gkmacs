@@ -1,4 +1,3 @@
-
 (use-package general
   :ensure (:wait t)
   :init
@@ -30,7 +29,7 @@
 
 (with-eval-after-load 'eldoc
   (eldoc-add-command 'doom/escape)
-  (eldoc-box-hover-mode)
+  ;; (eldoc-box-hover-mode)
   ;; (setq eldoc-echo-area-use-multiline-p nil)
   (gk/evil-keys
     "K" 'eldoc-box-help-at-point))
@@ -55,6 +54,9 @@
 (gk/evil-m-keys prog-mode-map
   "gcc" 'evilnc-comment-or-uncomment-lines)
 
+(gk/evil-m-keys conf-mode-map
+  "gcc" 'evilnc-comment-or-uncomment-lines)
+
 (gk/evil-v-keys prog-mode-map
   "gc" 'evilnc-comment-operator) 
 
@@ -73,7 +75,7 @@
 (gk/leader-keys
   "/" '(evilnc-comment-or-uncomment-lines :wk "comment/uncomment")
   "SPC" '(projectile-find-file :wk "find file in project")
-  "TAB" '(:keymap persp-mode-map)
+  "TAB" '(:keymap persp-key-map)
   "b" '(:keymap ibuffer-mode-map)
   "bb" '(switch-to-buffer :wk "switch to buffer")
   "bi" '(ibuffer :wk "ibuffer")
