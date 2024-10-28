@@ -91,6 +91,8 @@
   "hm" '(describe-mode :wk "describe mode")
   "hx" '(helpful-command :wk "describe mode")
   "gg" '(magit-status :wk "magit")
+  "o" '(:ignore t :wk "open")
+  "ot" '(multi-vterm-project :wk "open project terminal")
   "p" '(:keymap projectile-command-map)
   ;; "w" '(:ignore t :wk "window")
   "w" '(:keymap evil-window-map :wk "window"))
