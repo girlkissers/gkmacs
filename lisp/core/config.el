@@ -642,6 +642,10 @@ all hooks after it are ignored.")
 
 (use-package lua-mode)
 
+(use-package exec-path-from-shell
+  :init
+  (exec-path-from-shell-initialize))
+
 
 ;; (set-frame-font "Mononoki Nerd Font 9" nil t)
 (set-frame-font "Iosevka Comfy 10" nil t)
