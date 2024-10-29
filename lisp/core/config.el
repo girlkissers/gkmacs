@@ -34,10 +34,6 @@
   :ensure (:wait t))
 
 
-(use-package org-gcal
-  :init
-  (load (expand-file-name "private.el" user-emacs-directory)))
-
 (use-package org-super-agenda)
 
 (use-package affe
