@@ -88,6 +88,7 @@
 
 ;; Use Dabbrev with Corfu!
 (use-package dabbrev
+  :ensure nil
   ;; Swap M-/ and C-M-/
   :bind (("M-/" . dabbrev-completion)
          ("C-M-/" . dabbrev-expand))
