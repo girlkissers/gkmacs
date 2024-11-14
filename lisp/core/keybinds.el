@@ -31,8 +31,14 @@
   (eldoc-add-command 'doom/escape)
   ;; (eldoc-box-hover-mode)
   ;; (setq eldoc-echo-area-use-multiline-p nil)
-  (gk/evil-keys
+  (gk/evil-m-keys
     "K" 'eldoc-box-help-at-point))
+
+;; (gk/evil-keys minibuffer-mode-map
+;;   "ESC" 'abort-minibuffers)
+
+;; (gk/evil-keys minibuffer-local-map
+;;   "ESC" 'abort-minibuffers)
 
 (gk/evil-keys dired-mode-map
   "-" 'dired-up-directory)
