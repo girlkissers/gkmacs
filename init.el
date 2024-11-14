@@ -99,12 +99,6 @@
   :init
   (gcmh-mode 1))
 
-;; mapc uses the function, in this case "load" on each instance of the second parameter
-;; from documentation of "file-expand-wildcards": This returns a list of file names that match PATTERN.
-(mapc 'load (file-expand-wildcards (expand-file-name "lisp/*/*.el" user-emacs-directory)))
-
-;; (mapc 'load (file-expand-wildcards (expand-file-name "lisp/external/nursery/*.el" user-emacs-directory)))
-
 
 ;; (global-display-line-numbers-mode +1)
 (setq display-line-numbers t)
@@ -112,6 +106,15 @@
 (menu-bar--display-line-numbers-mode-relative)
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 (setopt use-short-answers t) 
-(org-roam-db-autosync-mode)
 (setq auto-save-file-name-transforms
       `((".*" "/tmp/gkmacs/" t)))
+
+;; mapc uses the function, in this case "load" on each instance of the second parameter
+;; from documentation of "file-expand-wildcards": This returns a list of file names that match PATTERN.
+(mapc 'load (file-expand-wildcards (expand-file-name "lisp/*/*.el" user-emacs-directory)))
+
+(org-roam-db-autosync-mode)
+;; (mapc 'load (file-expand-wildcards (expand-file-name "lisp/external/nursery/*.el" user-emacs-directory)))
+
+
+(require 'web)
