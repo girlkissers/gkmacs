@@ -29,7 +29,6 @@
 
 (elpaca (lsp-biome :host github :repo "cxa/lsp-biome"))
 
-(use-package svelte-mode)
 (use-package treesit-auto
   :custom
   (treesit-auto-install 'prompt)
@@ -95,12 +94,6 @@
 
 ;;; pimeys/emacs-prisma-mode/blob/main/prisma-mode.el
 
-;; ASTRO
-(with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs
-               '(astro-mode . ("astro-ls" "--stdio"
-                               :initializationOptions
-                               (:typescript (:tsdk "./node_modules/typescript/lib"))))))
 
 
 (use-package web-mode)
@@ -112,5 +105,20 @@
       (append '((".*\\.astro\\'" . astro-mode))
               auto-mode-alist))
 
-;;(provide 'web)
+
+(define-derived-mode svelte-mode web-mode "svelte")
+(setq auto-mode-alist
+      (append '((".*\\.svelte\\'" . svelte-mode))
+              auto-mode-alist))
+
+
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs
+               '(astro-mode . ("astro-ls" "--stdio"
+                               :initializationOptions
+                               (:typescript (:tsdk "./node_modules/typescript/lib"))))
+               '(svelte-mode . ("svelteserver" "--stdio"))))
+
+
+(provide 'web)
 ;;; web.el ends here
