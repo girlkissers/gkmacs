@@ -34,8 +34,6 @@
   :ensure (:wait t))
 
 
-(use-package org-super-agenda)
-
 (use-package affe
   :after consult
   :config
@@ -75,7 +73,8 @@
 (use-package corfu
   :init
   (setq corfu-auto t
-        corfu-quit-no-match t)
+        corfu-quit-no-match t
+        text-mode-ispell-word-completion nil)
   (corfu-popupinfo-mode)
   (global-corfu-mode))
 
@@ -111,9 +110,6 @@
                                    (registers . "e")))
   (dashboard-setup-startup-hook))
 
-(use-package denote
-  :init
-  (setq denote-directory (file-truename "~/org")))
 
 (use-package hl-todo
   :init
@@ -203,6 +199,11 @@
   (evil-collection-init)
   (evil-collection-ibuffer-setup))
 
+(use-package evil-escape
+  :init
+  (evil-escape-mode)
+  (setq-default evil-escape-key-sequence "jk"))
+
 (use-package evil-goggles)
 
 (use-package evil-nerd-commenter
@@ -272,7 +273,8 @@
   :init
   (add-hook 'git-commit-mode-hook 'evil-insert-state))
 
-
+(use-package forge
+  :after magit)
 
 
 (use-package marginalia
@@ -313,28 +315,6 @@
 (use-package nix-mode
   :mode "\\.nix\\'")
 
-(use-package ob-mermaid
-  :defer t
-  :config
-  (add-to-list 'org-babel-load-languages '(mermaid . t))
-  (setq ob-mermaid-cli-path "/usr/bin/mmdc"))
-
-(use-package org-modern
-  :ensure t
-  :custom
-  (org-modern-hide-stars nil)    		; adds extra indentation
-  ;; (org-modern-table nil)
-  (org-modern-list 
-   '((?- . "-")
-     (?* . "•")
-     (?+ . "‣")))
-  (org-modern-block-name '("" . "")) ; or other chars; so top bracket is drawn promptly
-  :hook
-  (org-mode . org-modern-mode)
-  (org-agenda-finalize . org-modern-agenda))
-
-;; (use-package org-superstar)
-;; (use-package org-fancy-priorities)
 
 ;; Optionally use the `orderless' completion style.
 (use-package orderless
@@ -346,17 +326,6 @@
   (completion-category-defaults nil)
   (completion-category-overrides '((file (styles partial-completion)))))
 
-(with-eval-after-load 'org
-  (setq org-return-follows-link  t)
-  (setq org-todo-keywords
-        '((sequence "TODO(t!)" "PROJ(p!)" "LOOP(r!)" "STRT(s!)" "WAIT(w!)" "HOLD(h!)" "IDEA(i!)" "|" "DONE(d!)" "KILL(k!)")
-          (sequence "[ ](T!)" "[-](S!)" "[?](W!)" "|" "[X](D!)")
-          (sequence "|" "OKAY(o!)" "YES(y!)" "NO(n!)"))))
-
-(use-package org-roam
-  :defer t
-  :init
-  (setq org-roam-directory (file-truename "~/org")))
 
 
 (use-package page-break-lines
@@ -400,13 +369,13 @@
   (add-hook 'after-init-hook
             #'(lambda ()
                 (persp-mode-projectile-bridge-mode 1))
-            t) )
+            t))
 
 (use-package projectile
   :init
   (setq projectile-project-search-path '("~/external/" "~/internal/" ("~/projects" . 2))
         projectile-enable-caching t)
-  (projectile-mode))
+  (add-hook 'after-init-hook 'projectile-mode))
 
 (use-package pulsar
   :config
@@ -530,14 +499,22 @@
   :init
   (global-wakatime-mode))
 
+(use-package on)
+
 (use-package which-key
+  :hook (on-first-input . which-key-mode)
   :config
   (which-key-mode 1))
+
+(use-package editorconfig
+  :config
+  (editorconfig-mode 1))
 
 
 
 
 (use-package multi-vterm
+  :hook on-first-buffer-hook
   :config
   (add-hook 'vterm-mode-hook
             (lambda ())
@@ -629,24 +606,21 @@ all hooks after it are ignored.")
 (defadvice split-window (after split-window-after activate)
   (other-window 1))
 
-(use-package org-bullets
-  :init
-  (add-hook 'org-mode-hook #'org-bullets-mode))
-
-(add-hook 'org-mode-hook #'org-indent-mode)
-
 (use-package xclip)
-
-(use-package lua-mode)
 
 (use-package exec-path-from-shell
   :init
   (exec-path-from-shell-initialize))
 
+(with-eval-after-load 'eglot
+  (elpaca (eglot-booster :host github :repo "jdtsmith/eglot-booster" :init (eglot-booster-mode 1))))
+
+
+
+
 
 ;; (set-frame-font "Mononoki Nerd Font 9" nil t)
 (set-frame-font "Iosevka Comfy 10" nil t)
-
 
 ;; (custom-set-faces
 ;;  '(org-level-1 ((t (:inherit outline-1 :height 1.75))))
@@ -654,6 +628,7 @@ all hooks after it are ignored.")
 ;;  '(org-level-3 ((t (:inherit outline-3 :height 1.25))))
 ;;  '(org-level-4 ((t (:inherit outline-4 :height 1.1))))
 ;;  '(org-level-5 ((t (:inherit outline-5 :height 1.0)))))
+
 
 
 ;; (set-face-attribute 'org-document-title nil :height 2.0)
